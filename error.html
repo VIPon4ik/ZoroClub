@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <link rel="stylesheet" href="main/styles/styles.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;500;600;700&display=swap" rel="stylesheet">
+    </head>
+
+    <body>
+        <header class="header">
+            <div class="left-section">
+            <a href="{% url 'home' %}"><div class="logo-text"><span>Z</span>orro Club</div></a>
+            </div>
+            <!-- <div class="middle-section">
+            <div class="search-container">
+                <div class="search-icon-container">
+                <img src="icons/search-icon.png">
+                <div class="search-tooltip-container">
+                    <div class="search-tooltip">
+                    <input class="search-bar-start" type="text" placeholder="Місто">
+                    </div>
+                    <div class="search-tooltip">
+                    <input class="search-bar" type="text" placeholder="Ціна">
+                    </div>
+                    <div class="search-tooltip">
+                    <input class="search-bar" type="text" placeholder="Порода">
+                    </div>
+                    <div class="search-tooltip">
+                    <input class="search-bar" type="text" placeholder="Рід">
+                    </div>
+                    <div class="search-tooltip">
+                    <input class="search-bar-end" type="text">
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div> -->
+            <div class="right-section">
+            <a class="add-advertisement-container" href="{% url 'chat-panel' %}">
+                <img src="{% static 'icons/plus-icon.png' %}">
+                <div class="add-advertisement">
+                Чати
+                </div>
+            </a>
+            <a href="{% url 'create-announcment' %}" class="add-advertisement-container">
+                <img src="{% static 'icons/plus-icon.png' %}">
+                <div class="add-advertisement">
+                <u>Додати оголошення</u>
+                </div>
+            </a>
+            <a class="favorites-container">
+                <img src="{% static 'icons/heart-icon.png' %}">
+                <div class="favorites">
+                Улюбленці
+                </div>
+            </a>
+            <a class="sign-in-container" href="{% url 'profile' request.user.id%}">
+                <img src="{% static 'icons/user-icon.png' %}">
+                <div class="sign-in">
+                <u>{{request.user.name}}</u>
+                </div>
+            <div class="sign-in">
+                </div>
+                {% endif %}
+            </a>
+            {% else %}
+            <a class="sign-in-container" href="{% url 'login' %}">
+                <img src="{% static 'icons/user-icon.png' %}">
+                <div class="sign-in">
+                Вхід
+                </div>
+                {% else %}
+            <div class="sign-in">
+                Вхід
+                </div>
+
+            </a>
+
+            </div>
+        </header>
+
+        <main style="display: flex; justify-content: center;align-items: center;">
+            <div class="eror-container">
+                <img src="main/icons/dog-icon.png">
+                <p>Виникла помилка :(</p>
+            </div>
+        </main>
+    </body>
+</html>

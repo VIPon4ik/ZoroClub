@@ -1,0 +1,105 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+<main>
+    <div style="margin-left:220px;">
+        <div style="font-family: 'Comfortaa';
+        font-style: normal;
+        font-weight: 500;
+        font-size: 26px;
+        line-height: 36px;
+        margin-top:20px;
+        margin-bottom:10px;
+        display: flex;
+        align-items: center;
+        margin-right:220px;
+        color: #000000;">
+            Вподобайки:
+        </div>
+        <div class="articles-grid" style="margin-top:0;">
+          {% for announcment in announcments %}
+          <div class="article-container">
+            <div class="image-container">
+              <a href="{% url 'announcment' announcment.id %}"><img src="{{announcment.image.url}}"></a>
+                  {% if announcment.owner == request.user %}
+                    <a href="{% url 'delete-announcment' announcment.id %}" class="cross">╳</a>
+                  {% endif %}
+            </div>
+            <div class="article">
+              <div class="article-info">
+                <div class="age-info">
+
+                  <div class="age">
+                    {{announcment.name|truncatechars:20}}
+                  </div>
+                </div>
+                <div class="age-info">
+                  <img src="{% static 'icons/age-icon.png' %}">
+                  <div class="age">
+                    {{announcment.old|truncatechars:20}}
+                  </div>
+                </div>
+                <div class="race-info">
+                  <img src="{% static 'icons/race-icon.png' %}">
+                  <div class="race">
+                    {{announcment.breed|truncatechars:20}}
+                  </div>
+                </div>
+                <div class="breed-info">
+                  <img src="{% static 'icons/breed-icon.png' %}">
+                  <div class="breed">
+                    {{announcment.sex|truncatechars:20}}
+                  </div>
+                </div>
+                <div class="club-info">
+                  <img src="{% static 'icons/club-icon.png' %}">
+                  <div class="club">
+                    {{announcment.documents|truncatechars:20}}
+                  </div>
+                </div>
+                <div class="place-info">
+                  <img src="{% static 'icons/place-icon.png' %}">
+                  <div class="place">
+                    {{announcment.city|truncatechars:20}}
+                  </div>
+                </div>
+                <div class="poshuk-info">
+                  <img src="{% static 'icons/poshuk-icon.png' %}">
+                  <div class="poshuk">
+                    {{announcment.purpose|truncatechars:20}}
+                  </div>
+                </div>
+                <p class="price">
+                  {{announcment.price|truncatechars:10}}
+                </p>
+              </div>
+              {% if request.user in announcment.favorites.all %}
+              <div class="article-like">
+                <a style="cursor:pointer;" onclick="saveScrollPosition()" href="{% url 'delete-favorites' announcment.id %}"><img style="height:27px;width:27px;" src="{% static 'icons/red-heart-icon.png' %}"></a>
+              </div>
+              {% else %}
+              <div class="article-like">
+                <a style="cursor:pointer;" onclick="saveScrollPosition()" href="{% url 'add-favorites' announcment.id %}"><img src="{% static 'icons/heart-icon.png' %}"></a>
+              </div>
+              {% endif %}
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+    </div>
+  <script>
+    function saveScrollPosition() {
+      sessionStorage.setItem('scrollPosition', window.pageYOffset);
+    }
+
+    window.onload = function() {
+        const scrollPosition = sessionStorage.getItem('scrollPosition');
+        if (scrollPosition) {
+          window.scrollTo(0, scrollPosition);
+          sessionStorage.removeItem('scrollPosition');
+        }
+      }
+  </script>
+</main>
+{% endblock %}

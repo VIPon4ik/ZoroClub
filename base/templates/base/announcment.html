@@ -1,0 +1,90 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+ <main>
+        <div class="announcment-grid">
+          <div class="announcment-user-info">
+            <div class="announcment-photos">
+<!--              <div class="small-photos">-->
+<!--                <div class="small-photos-top">-->
+<!--                  <img src="{% static 'images/DSC_05842.png' %}">-->
+<!--                  <img src="{% static 'images/DSC_05842.png' %}">-->
+<!--                </div>-->
+<!--                <button class="small-photos-bot">+7</button>-->
+<!--              </div>-->
+              <div class="big-photo">
+                <img src="{{announcment.image.url}}">
+                  {% if announcment.owner == request.user %}
+                    <a href="{% url 'delete-announcment' announcment.id %}" class="cross">╳</a>
+                  {% endif %}
+              </div>
+            </div>
+            <div class="announcment-user">
+              <div class="announcment-user-name">
+                {% if announcment.owner.avatar.url != '/images/avatar.png'%}
+                <img src="{{announcment.owner.avatar.url}}">
+                {% else %}
+                <img class="profile-picture" style="padding:5px;height:45px;width:45px;" src="{{announcment.owner.avatar.url}}">
+                {% endif %}
+                <p>{{announcment.owner.username|truncatechars:20}}</p>
+              </div>
+              <div class="announcment-user-div">
+                <div class="announcment-user-links">
+<!--                  <a class="announcment-user-reviews">Відгуки про продавця</a>-->
+                  <a class="announcment-user-profile" href="{% url 'profile' announcment.owner.id %}">Профіль</a>
+                  <p class="announcment-user-number">{{announcment.owner.number}}</p>
+<!--                  <div>-->
+<!--                    <a><img src="{% static 'icons/viber.png' %}"></a>-->
+<!--                    <a><img src="{% static 'icons/telegram.png' %}"></a>-->
+<!--                  </div>-->
+                </div>
+                <button class="write"><a href="{% url 'create-chat' announcment.owner.id %}">Написати автору</a></button>
+              </div>
+            </div>
+          </div>
+          <div class="announcment-info">
+            <div class="announcment-info-container">
+              <p class="announcment-dog-title">Інформація:</p>
+              {% if request.user == announcment.owner %}
+              <a href="{% url 'update-announcment' announcment.id %}"><img src="{% static 'icons/edit.png' %}"></a>
+              {% endif %}
+            </div>
+            <hr>
+            <div class="announcment-dog-char">
+              <div class="announcment-dog-char-column">
+                <p class="char">Порода:</p>
+                <p class="char">Вік:</p>
+                <p class="char">Стать:</p>
+                <p class="char">Наявність документів:</p>
+                <p class="char">Призначення:</p>
+                <p class="char">Область/місто:</p>
+                <p class="char">Ціна:</p>
+              </div>
+              <div class="announcment-dog-char-column">
+                <p class="char">{{announcment.breed}}</p>
+                <p class="char">{{announcment.old}}</p>
+                <p class="char">{{announcment.sex}}</p>
+                <p class="char">{{announcment.documents}}</p>
+                <p class="char">{{announcment.purpose}}</p>
+                <p class="char">{{announcment.city}}</p>
+                <p class="char">{{announcment.price}}₴</p>
+              </div>
+            </div>
+            <div class="announcment-description">
+              <p class="announcment-dog-title">Опис:</p>
+              <hr>
+              <p class="description">{{announcment.description}}</p>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex; justify-content: space-between;">
+            <a class="user-announcments-link"></a>
+            {% if request.user in announcment.favorites.all %}
+            <a class="announcment-favorites" href="{% url 'delete-favorites' announcment.id %}"><img src="{% static 'icons/red-heart-icon.png' %}"></a>
+            {% else %}
+            <a class="announcment-favorites" href="{% url 'add-favorites' announcment.id %}"><img src="{% static 'icons/heart-icon.png' %}"></a>
+            {% endif %}
+        </div>
+ </main>
+{% endblock %}

@@ -1,0 +1,104 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+<main>
+        <div class="announcment-grid">
+          <div class="announcment-user-info">
+            <div class="announcment-photos">
+<!--              <div class="small-photos">-->
+<!--                <div class="small-photos-top">-->
+<!--                  <img src="{% static 'images/DSC_05842.png' %}">-->
+<!--                  <img src="{% static 'images/DSC_05842.png' %}">-->
+<!--                </div>-->
+<!--                <button class="small-photos-bot">+7</button>-->
+<!--              </div>-->
+              <div class="big-photo">
+                <img src="{{announcment.image.url}}">
+              </div>
+            </div>
+            <div class="announcment-user">
+              <div class="announcment-user-name">
+                <img src="{{announcment.owner.avatar.url}}">
+                <p>{{announcment.owner.username}}</p>
+              </div>
+              <div class="announcment-user-div">
+                <div class="announcment-user-links">
+<!--                  <a class="announcment-user-reviews">Відгуки про продавця</a>-->
+                  <a class="announcment-user-profile" href="{% url 'profile' request.user.id %}">Профіль</a>
+                  <p class="announcment-user-number">{{announcment.owner.number}}</p>
+<!--                  <div>-->
+<!--                    <a><img src="{% static 'icons/viber.png' %}"></a>-->
+<!--                    <a><img src="{% static 'icons/telegram.png' %}"></a>-->
+<!--                  </div>-->
+                </div>
+                <button class="write"><a href="{% url 'create-chat' announcment.owner.id %}">Написати автору</a></button>
+              </div>
+            </div>
+          </div>
+          <div class="announcment-info">
+            <div class="announcment-info-container">
+              <p class="announcment-dog-title">Інформація:</p>
+              <a href="{% url 'home' %}">&#8592</a>
+            </div>
+            <hr>
+            <div class="announcment-dog-char">
+               <div class="announcment-dog-char-column"><p class="char">Назва оголошення:</p>
+                    <p class="char">Порода:</p>
+                    <p class="char">Вік:</p>
+                    <p class="char">Стать:</p>
+                    <p class="char">Наявність документів:</p>
+                    <p class="char">Призначення:</p>
+                    <p class="char">Область/місто:</p>
+                    <p class="char">Ціна:</p>
+                    <p class="announcment-dog-title">Опис:</p>
+
+
+               </div>
+               <form method="POST" action="" class="announcment-dog-char-column">
+                    {% csrf_token %}
+                    <input required class="update" type="text" name="name" value="{{announcment.name}}">
+                    <select name="breed" class="announcment-select">
+                        <option value="{{announcment.breed}}">{{announcment.breed}}</option>
+                        {% for breed in breeds %}
+                        {% if breed != announcment.breed %}
+                        <option value="{{breed}}">{{breed}}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+                    <input required class="update" type="text" name="old" value="{{announcment.old}}">
+                    <select name="sex" class="announcment-select">
+                        <option value="Пес">Пес</option>
+                        <option value="Сука">Сука</option>
+                    </select>
+                    <input class="update" type="text" name="documents" value="{{announcment.documents}}">
+                    <select name="purpose" class="announcment-select">
+                        <option value="{{announcment.purpose}}">{{announcment.purpose}}</option>
+                        {% for purpose in purposes %}
+                        {% if purpose != announcment.purpose %}
+                        <option value="{{purpose}}">{{purpose}}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+                    <select name="city" class="announcment-select">
+                        <option value="{{announcment.city}}">{{announcment.city}}</option>
+                        {% for city in cities %}
+                        {% if city != announcment.city %}
+                        <option value="{{city}}">{{city}}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+                    <input required class="update" type="number" name="price" value="{{announcment.price}}" style="margin-right:0;display:inline-block;"><span style="display:nline-block;">₴</span>
+                    <textarea class="update-description" name="description" >{{announcment.description}}</textarea>
+                    <input type="submit" value="Змінити" class="change">
+               </form>
+            </div>
+
+          </div>
+        </div>
+<!--        <div style="display:flex; justify-content: space-between;">-->
+<!--            <a class="user-announcments-link">Інші оголошення Руслана</a>-->
+<!--            <a class="user-announcments-link" href="{% url 'delete-announcment' announcment.id %}">Видалити оголошення</a>-->
+<!--        </div>-->
+ </main>
+{% endblock %}
