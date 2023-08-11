@@ -1,0 +1,184 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+<main>
+            <div class="profile-info-container">
+                <div class="user-name-avatar">
+                    <a href="{% url 'edit-profile' %}" style="cursor: pointer;">
+                        {% if user.avatar.url != '/images/avatar.png'%}
+                        <img class="profile-picture" src="{{user.avatar.url}}">
+                        {% else %}
+                        <img class="profile-picture" style="height:85px;width:85px;padding:5px;" src="{{user.avatar.url}}">
+                        {% endif %}
+                    </a>
+                    <p class="username">{{user.username|truncatechars:20}}
+                        {% if request.user == user %}
+                        <a style="cursor: pointer;" href="{% url 'edit-profile' %}">
+                            <img src="{% static 'icons/edit.png' %}" style="height:20px; width: 20px;
+                        padding:0; border-width:0;border-radius:0;
+                        position: absolute; top:-30px;right:-30px;">
+                        </a>
+                        {% endif %}
+                    </p>
+                </div>
+                <div class="user-info-container">
+                    <div class="info-container">
+                        <p>E-mail</p>
+                        <div style="cursor:pointer;" class="user-info" data-id="copy" onclick="copyToClipboard()">{{user.email|truncatechars:20}}</div>
+                    </div>
+
+                    <div class="info-container" style="margin-left:75px;">
+                        <p>Телефон</p>
+                        <div class="user-info" data-id="copy" onclick="copyToClipboard()" style="cursor:pointer;padding-right: 6px; width:150px;">
+                            {{user.number|truncatechars:14}}
+                        </div>
+                    </div>
+
+                   <div class="info-container" style="margin-left:75px;">
+                        <p>Область/Місто</p>
+                        <div class="user-info" data-id="copy" onclick="copyToClipboard()" style="padding-right: 6px;width:220px;cursor:pointer;">{{user.city|truncatechars:20}}</div>
+                    </div>
+
+                    {% if request.user == user %}
+
+                    {% else %}
+                    <button class="write profile-write">
+                        <a href="{% url 'create-chat' user.id %}">Написати автору</a>
+                    </button>
+                    {% endif %}
+                </div>
+            </div>
+            {% if request.user == user %}
+            <p class="your-announcment">Ваші оголошення:</p>
+            {% else %}
+            <p class="your-announcment">Оголошення користувача:</p>
+            {% endif %}
+            <div class="articles-grid" style="margin-left: 200px;">
+                {% for announcment in announcments %}
+                    <div class="article-container">
+                    <div class="image-container">
+                      <a href="{% url 'announcment' announcment.id %}"><img src="{{announcment.image.url}}"></a>
+                          {% if announcment.owner == request.user %}
+                            <a href="{% url 'delete-announcment' announcment.id %}" class="cross">╳</a>
+                          {% endif %}
+                    </div>
+                    <div class="article">
+                      <div class="article-info">
+                        <div class="age-info">
+
+                          <div class="age">
+                            {{announcment.name|truncatechars:20}}
+                          </div>
+                        </div>
+                        <div class="age-info">
+                          <img src="{% static 'icons/age-icon.png' %}">
+                          <div class="age">
+                            {{announcment.old|truncatechars:20}}
+                          </div>
+                        </div>
+                        <div class="race-info">
+                          <img src="{% static 'icons/race-icon.png' %}">
+                          <div class="race">
+                            {{announcment.breed|truncatechars:20}}
+                          </div>
+                        </div>
+                        <div class="breed-info">
+                          <img src="{% static 'icons/breed-icon.png' %}">
+                          <div class="breed">
+                            {{announcment.sex|truncatechars:20}}
+                          </div>
+                        </div>
+                        <div class="club-info">
+                          <img src="{% static 'icons/club-icon.png' %}">
+                          <div class="club">
+                            {{announcment.documents|truncatechars:20}}
+                          </div>
+                        </div>
+                        <div class="place-info">
+                          <img src="{% static 'icons/place-icon.png' %}">
+                          <div class="place">
+                            {{announcment.city|truncatechars:20}}
+                          </div>
+                        </div>
+                        <div class="poshuk-info">
+                          <img src="{% static 'icons/poshuk-icon.png' %}">
+                          <div class="poshuk">
+                            {{announcment.purpose|truncatechars:20}}
+                          </div>
+                        </div>
+                        <p class="price">
+                          {{announcment.price|truncatechars:10}}
+                        </p>
+                      </div>
+                      {% if request.user in announcment.favorites.all %}
+                      <div class="article-like">
+                        <a style="cursor:pointer;" onclick="saveScrollPosition()" href="{% url 'delete-favorites' announcment.id %}"><img style="height:27px;width:27px;" src="{% static 'icons/red-heart-icon.png' %}"></a>
+                      </div>
+                      {% else %}
+                      <div class="article-like">
+                        <a style="cursor:pointer;" onclick="saveScrollPosition()" href="{% url 'add-favorites' announcment.id %}"><img src="{% static 'icons/heart-icon.png' %}"></a>
+                      </div>
+                      {% endif %}
+                    </div>
+                  </div>
+                {% endfor %}
+
+                {% if user == request.user %}
+                    <a style="cursor:pointer;" href="{% url 'create-announcment' %}">
+                        <div class="article-container">
+                            <div class="image-container profile-image-container" >
+                              <img style="height: 100%; width: 100%;border-width:0;
+                                margin:0;"
+                                src="{% static 'icons/dog-icon.png' %}">
+                            </div>
+                            <div class="article profile-article" >
+                                <img style="height: 100px;
+                                width: 100px;
+                                color: #9BCFC1;
+                                ;" src="{% static 'icons/white-plus.png' %}">
+                                <p style="font-family: 'Comfortaa';
+                                font-style: normal;
+                                font-weight: 400;
+                                font-size: 18px;
+                                display: flex;
+                                align-items: center;
+                                text-align: center;
+
+                                color: rgba(255, 255, 255, 0.5);">Додати оголошення</p>
+                            </div>
+                        </div>
+                    </a>
+                {% endif %}
+            </div>
+
+    <script>
+      var copyables = document.querySelectorAll(".user-info");
+      var message = document.querySelector("#copy-message");
+
+      copyables.forEach(function(copyable) {
+        copyable.addEventListener("click", function() {
+          var text = this.innerHTML;
+          navigator.clipboard.writeText(text);
+
+          message.style.display = "block";
+          setTimeout(function() {
+            message.style.display = "none";
+          }, 1000);
+        });
+      });
+
+      function saveScrollPosition() {
+        sessionStorage.setItem('scrollPosition', window.pageYOffset);
+      }
+
+      window.onload = function() {
+          const scrollPosition = sessionStorage.getItem('scrollPosition');
+          if (scrollPosition) {
+            window.scrollTo(0, scrollPosition);
+            sessionStorage.removeItem('scrollPosition');
+          }
+        }
+    </script>
+</main>
+{% endblock %}

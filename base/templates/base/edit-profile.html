@@ -1,0 +1,82 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+<form method="POST" action="" style="display:flex; justify-content:center;align-items:center;
+flex-direction:column;" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="profile-info-container" style="margin-left:470px;">
+                <div class="user-name-avatar">
+                    <a href="{% url 'edit-profile' %}" style="cursor: pointer;" >
+                        <label for="avatar" style="cursor:pointer;">
+                            {% if user.avatar.url != '/images/avatar.png'%}
+                            <img id="myImgElement"  src="{{user.avatar.url}}" style="cursor:pointer;">
+                            {% else %}
+                            <img class="profile-picture" id="myImgElement" style="height:85px;width:85px;padding:5px;" src="{{user.avatar.url}}">
+                            {% endif %}
+                        </label>
+                        <input type="file" id="avatar" name="avatar" style="display:none;" accept=".png,.jpeg,.jpg">
+                    </a>
+                    <p class="username"><input type="text" value="{{user.username}}" name="username">
+                        {% if request.user == user %}
+                        <a style="cursor: pointer;" href="{% url 'edit-profile' %}">
+                            <img src="{% static 'icons/edit.png' %}" style="height:20px; width: 20px;
+                        padding:0; border-width:0;border-radius:0;
+                        position: absolute; top:-30px;right:-30px;display:None;">
+                        </a>
+                        {% endif %}
+                    </p>
+                </div>
+                <div class="user-info-container">
+                    <div class="info-container">
+                        <p>E-mail</p>
+                        <div class="user-info">{{user.email}}</div>
+                    </div>
+
+                    <div class="info-container" style="margin-left:80px;">
+                        <p>Телефон</p>
+                        <div class="us-in-in" style="padding:0;"><input style="width:120px;" type="number" value="{{user.number}}" name="number"></div>
+                    </div>
+
+                    <div class="info-container" style="margin-left:80px;">
+                        <p>Область/Місто</p>
+                        <div class="us-in-in" style="">
+                            <select name="city" style="width:220px;" class="select-class">
+                                <option value="{{user.city}}">{{user.city}}</option>
+                                {% for city in cities %}
+                                {% if city != user.city %}
+                                <option value="{{city}}">{{city}}</option>
+                                {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+    <input class="edit-profile-button" type="submit" value="Змінити">
+    {% for message in messages %}
+    {{message}}
+    {% endfor %}
+</form>
+
+<script>
+        var fileInput = document.getElementById('avatar');
+        var imgElement = document.getElementById('myImgElement');
+
+        fileInput.addEventListener('change', function() {
+          var file = fileInput.files[0];
+          var reader = new FileReader();
+
+          reader.addEventListener('load', function() {
+            imgElement.src = reader.result;
+            imgElement.style.cssText = 'padding:0px;height:95px;width:95px;';
+          });
+
+          reader.readAsDataURL(file);
+        });
+    </script>
+
+{% endblock %}

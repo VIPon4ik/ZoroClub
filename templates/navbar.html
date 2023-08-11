@@ -1,0 +1,104 @@
+{% load static %}
+<header class="header">
+      <div class="left-section">
+        <a href="{% url 'home' %}"><div class="logo-text"><span>Z</span>orro Club</div></a>
+      </div>
+      <!-- <div class="middle-section">
+        <div class="search-container">
+          <div class="search-icon-container">
+            <img src="icons/search-icon.png">
+            <div class="search-tooltip-container">
+              <div class="search-tooltip">
+                <input class="search-bar-start" type="text" placeholder="Місто">
+              </div>
+              <div class="search-tooltip">
+                <input class="search-bar" type="text" placeholder="Ціна">
+              </div>
+              <div class="search-tooltip">
+                <input class="search-bar" type="text" placeholder="Порода">
+              </div>
+              <div class="search-tooltip">
+                <input class="search-bar" type="text" placeholder="Рід">
+              </div>
+              <div class="search-tooltip">
+                <input class="search-bar-end" type="text">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> -->
+      <div class="right-section">
+        <a class="add-advertisement-container" href="{% url 'chat-panel' %}">
+          <img src="{% static 'icons/chat-icon.png' %}">
+            {% if page == 'chat-panel' or page == 'chat' %}
+          <div class="add-advertisement">
+            <u>Чати</u>
+          </div>
+            {% else %}
+            <p class="add-advertisement">
+                Чати
+            </p>
+            {% endif %}
+        </a>
+        <a href="{% url 'create-announcment' %}" class="add-advertisement-container">
+          <img src="{% static 'icons/plus-icon.png' %}">
+          {% if page == 'create' %}
+          <p class="add-advertisement">
+            <u>Додати оголошення</u>
+          </p>
+          {% else %}
+          <p class="add-advertisement">
+            Додати оголошення
+          </p>
+          {% endif %}
+        </a>
+        <a href="{% url 'favorites' %}" class="favorites-container">
+          <img src="{% static 'icons/heart-icon.png' %}">
+            {% if page == 'favorites' %}
+              <div class="favorites">
+                <u>Улюбленці</u>
+              </div>
+            {% else %}
+              <p class="favorites">
+                Улюбленці
+              </p>
+            {% endif %}
+        </a>
+        {% if request.user.is_authenticated %}
+              {% if page == 'profile' %}
+                {% if request.user == user %}
+                <a class="sign-in-container" href="{% url 'logout' %}">
+                    <img src="{% static 'icons/exit-icon.png' %}">
+                </a>
+                {% else %}
+                <a class="sign-in-container" href="{% url 'profile' request.user.id %}">
+                    <img src="{% static 'icons/user-icon.png' %}">
+                      <p class="sign-in">
+                          {{ request.user.username|truncatechars:20 }}
+                      </p>
+                </a>
+                {% endif %}
+              {% else %}
+              <a class="sign-in-container" href="{% url 'profile' request.user.id %}">
+                    <img src="{% static 'icons/user-icon.png' %}">
+                      <p class="sign-in">
+                          {{ request.user.username|truncatechars:20 }}
+                      </p>
+                </a>
+              {% endif %}
+        {% else %}
+        <a class="sign-in-container" href="{% url 'login' %}">
+          <img src="{% static 'icons/user-icon.png' %}">
+          {% if page == 'login' or page == 'register' %}
+          <p class="sign-in">
+            <u>Вхід</u>
+          </p>
+          {% else %}
+          <p class="sign-in">
+            Вхід
+          </p>
+          {% endif %}
+        </a>
+        {% endif %}
+      </div>
+    </header>

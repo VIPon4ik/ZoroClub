@@ -1,0 +1,196 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+{% if page == 'chat-panel' %}
+<main>
+    <div class="chats-grid">
+        <div class="chat-left">
+            {% for chat in chats_in %}
+            {% for participant in chat.participants.all %}
+            {% if request.user != participant %}
+            <div class="chat-left-participants-container">
+                <a href="{% url 'chat-page' participant.id %}">
+                    <div class="chat-container" style="background-color: #dbebe6; border-radius: 6px;">
+                            <div class="chat-image-container">
+                                {% if participant.avatar.url != '/images/avatar.png'%}
+                                <img class="profile-picture" src="{{participant.avatar.url}}">
+                                {% else %}
+                                <img class="profile-picture" style="height:43px;width:43px;padding:5px;" src="{{participant.avatar.url}}">
+                                {% endif %}
+                            </div>
+                            <div class="chat-info-container">
+                                <p class="chat-info-user">{{participant.username|truncatechars:16}}</p>
+                                <div class="chat-time">{{chat.message_set.last.created|time:'G:i'}}</div>
+                                {% if chat.message_set.last is None %}
+
+                                {% else %}
+                                <p class="chat-last-message">{{chat.message_set.last|truncatechars:20}}</p>
+                                {% endif %}
+                            </div>
+                    </div>
+                </a>
+
+                <a class="chat-a-tag" href="{% url 'profile' participant.id %}">{{participant.username|truncatechars:16}}</a>
+            </div>
+            {% endif %}
+            {% endfor %}
+            {% endfor %}
+
+        </div>
+
+        <div class="chat-right" style="display:flex; justify-content:center;align-items:center;">
+            <p style="font-family: 'Comfortaa';">Оберіть чат</p>
+        </div>
+    </div>
+</main>
+<!--<div style="display: flex;">-->
+<!--    <div>-->
+<!--         {% for chat in chats_in %}-->
+<!--         {% for participant in chat.participants.all %}-->
+<!--         {% if request.user != participant %}-->
+<!--            <div style="margin-top: 20px;-->
+<!--            margin-left:100px; border-style:solid; border-color: black;-->
+<!--            width:200px; flex:1;">-->
+<!--                <a href="{% url 'chat-page' participant.id %}" style="margin:20px; display: block; font-size: 20px;">{{participant.username}}</a>-->
+<!--                <a href="{% url 'profile' participant.id %}" style="margin:10px; display: block; font-size: 10px;">Профіль</a>-->
+<!--            </div>-->
+<!--         {% endif %}-->
+<!--         {% endfor %}-->
+<!--         {% endfor %}-->
+<!--    </div>-->
+
+
+<!--    <div style="flex: 4;-->
+<!--    margin-top:20px;-->
+<!--    height:500px;border-style:solid; border-color: black;-->
+<!--    display:flex; justify-content: center; align-items:center;">-->
+<!--        <p>Оберіть чат</p>-->
+<!--    </div>-->
+<!--</div>-->
+{% else %}
+<main>
+    <div class="chats-grid">
+        <div class="chat-left">
+            {% for chat in chats_in %}
+            {% for participant in chat.participants.all %}
+            {% if request.user != participant %}
+            {% if participant == our_user %}
+            <div class="chat-left-participants-container">
+                <a href="{% url 'chat-page' participant.id %}">
+                    <div class="chat-container">
+                            <div class="chat-image-container">
+                                {% if participant.avatar.url != '/images/avatar.png'%}
+                                <img class="profile-picture" src="{{participant.avatar.url}}">
+                                {% else %}
+                                <img class="profile-picture" style="height:43px;width:43px;padding:5px;" src="{{participant.avatar.url}}">
+                                {% endif %}
+                            </div>
+                            <div class="chat-info-container">
+                                    <p class="chat-info-user">{{participant.username|truncatechars:16}}</p>
+                                    <div class="chat-time">{{chat.message_set.last.created|time:'G:i'}}</div>
+                                    {% if chat.message_set.last is None %}
+
+                                    {% else %}
+                                    <p class="chat-last-message">{{chat.message_set.last|truncatechars:20}}</p>
+                                    {% endif %}
+                            </div>
+                    </div>
+                </a>
+
+                <a class="chat-a-tag" href="{% url 'profile' participant.id %}">{{participant.username|truncatechars:16}}</a>
+            </div>
+            {% else %}
+            <div class="chat-left-participants-container">
+                <a href="{% url 'chat-page' participant.id %}">
+                    <div class="chat-container" style="background-color: #dbebe6; border-radius: 6px;">
+                            <div class="chat-image-container">
+                                {% if participant.avatar.url != '/images/avatar.png'%}
+                                <img class="profile-picture" src="{{participant.avatar.url}}">
+                                {% else %}
+                                <img class="profile-picture" style="height:43px;width:43px;padding:5px;" src="{{participant.avatar.url}}">
+                                {% endif %}
+                            </div>
+                            <div class="chat-info-container">
+                                <p class="chat-info-user">{{participant.username|truncatechars:16}}</p>
+                                <div class="chat-time">{{chat.message_set.last.created|time:'G:i'}}</div>
+                                {% if chat.message_set.last is None %}
+
+                                {% else %}
+                                <p class="chat-last-message">{{chat.message_set.last|truncatechars:20}}</p>
+                                {% endif %}
+                            </div>
+                    </div>
+                </a>
+
+                <a class="chat-a-tag" href="{% url 'profile' participant.id %}">{{participant.username|truncatechars:16}}</a>
+            </div>
+            {% endif %}
+            {% endif %}
+            {% endfor %}
+            {% endfor %}
+        </div>
+
+        <div class="chat-right">
+                    <div class="chat-top">
+                        <p class="chat-top-date">{{chat.created|date:'d.m.y'}}</p>
+                    </div>
+<!--                    <a><img class="chat-top-img" src="{% static 'icons/alert-man.png' %}"></a>-->
+                    <div class="chat-right-main">
+                        {% for message in messages %}
+                        {% if message.user == request.user %}
+                        <div class="chat-flex-div">
+                            <div class="chat-your-message" id="message-{{ message.id }}">
+                                <div class="chat-username"><a href="{% url 'profile' message.user.id %}">{{message.user.username|truncatechars:20}}</a></div>
+                                <div class="chat-message">{{message.body}}
+                                </div>
+                                <div class="chat-message-time">{{message.created|time:'G:i'}}</div>
+                            </div>
+
+                            <div style=""></div>
+                        </div>
+                        {% else %}
+                        <div class="chat-flex-div">
+                            <div style="flex:1;"></div>
+                            <div class="chat-notyour-message" id="message-{{ message.id }}">
+                                <div class="chat-username"><a href="{% url 'profile' message.user.id %}">{{message.user.username|truncatechars:20}}</a></div>
+                                <div class="chat-message">{{message.body}}
+                                </div>
+                                <div class="chat-message-time">{{message.created|time:'G:i'}}</div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+
+
+                    </div>
+                    <div class="chat-input-flex">
+                        <div class="chat-input">
+                            <form action="" method="POST" class="chat-input-input">
+                                {% csrf_token %}
+                                    <input class="chat-input-input" id="message-input" type="text" placeholder="Написати повідомлення..." name="body">
+                                <div class="chat-input-img">
+                                    <button class="send-but" type="submit"><img src="{% static 'icons/send-icon.png' %}"></button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+     <script>
+          window.onload = function() {
+            var message = document.querySelector("#message-{{ messages.last.id }}");
+            if (message) {
+              message.scrollIntoView();
+            }
+
+            var input = document.querySelector("#message-input");
+            if (input) {
+              input.focus();
+            }
+          }
+    </script>
+</main>
+{% endif %}
+{% endblock %}

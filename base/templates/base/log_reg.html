@@ -1,0 +1,120 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+{% if page == 'login' %}
+ <main>
+     <div style="background:black;position:absolute;left:0;right:0;top:0;bottom:0;
+     z-index:10;opacity:0.2;display:none;" class="black-screen"></div>
+            <div class="log-container">
+                <div class="log-left">
+                    <div class="log-left-container">
+                        <div class="log-in">
+                            Вхід
+                        </div>
+                        <div class="log-inputs">
+                            <form method="POST" action="">
+                                {% csrf_token %}
+                                <label>E-mail</label>
+                                <input class="log-input" type="text" name="email">
+
+                                <label>Пароль</label>
+                                <input class="log-input" type="password" name="password">
+
+                                <input type="radio" name="check" class="checkbox">
+                                <label class="agree">я погоджуюсь з правилами сайту</label>
+
+                                <a class="log-reg-link" style="cursor:pointer;" href="{% url 'registration' %}">Створити аккаунт</a>
+
+                                <input class="log-button" type="submit" value="Ввійти">
+                                {% for message in messages %}
+                                <div class="agree" style="font-family: 'Comfortaa';padding:0;margin:0;font-size:12px;margin-bottom:10px;font-family:">{{message}}</div>
+                                {% endfor %}
+                            </form>
+                            <div class="log-rules" onclick="rulesButtonOn();">
+                                <img src="{% static 'icons/rules-icon.png' %}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="log-right">
+                    <img src="{% static 'images/log-1.png' %}">
+                    <img src="{% static 'images/log-2.png' %}">
+                    <img src="{% static 'images/log-3.png' %}">
+                    <img src="{% static 'images/log-4.png' %}">
+                    <img src="{% static 'images/log-5.png' %}">
+                    <img src="{% static 'images/log-6.png' %}">
+                    <div class="right-rules">
+                        <p style="margin-left:20px;margin-right:20px;margin-top:26px;">1.1. Якщо ви вирішили користуватися вищезгаданими сайтами та їх додатками, включаючи RSS, API, програмне забезпечення та інші файли, ви даєте згоду на дотримання всіх умов, викладених у цих Правилах користування сайтом (надалі - Правила).
+                            1.2. Ми можемо змінювати, додавати або видаляти частини цих Умов надання послуг у будь-який час і такі зміни набирають чинності негайно після публікації. Ваше зобов’язання розглянути ці Правила перед кожним використанням сайту і продовжуючи використовувати цей сайт, ви погоджуєтесь на будь-які зміни та зобов’язання розглянути ці Правила перед кожним використанням сайту і .
+                            1.3 Ми можемо змінювати, додавати або видаляти правила сайту.
+                        </p>
+                        <div class="rules-button-container">
+                            <button class="rules-button" onclick="rulesButtonOff();">Ознайомлений</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+{% else %}
+ <main>
+     <div style="background:black;position:absolute;left:0;right:0;top:0;bottom:0;
+     z-index:10;opacity:0.2;display:none;" class="black-screen"></div>
+        <div class="log-container">
+        <div class="log-left">
+            <div class="log-left-container">
+                <div class="log-in">
+                    Створення аккаунту
+                </div>
+                <div class="log-inputs">
+                    <form method="POST" action="">
+                        {% csrf_token %}
+                         <label>E-mail</label>
+                        <input required class="log-input" type="text" name="email">
+
+                        <label>Пароль</label>
+                        <input required class="log-input" type="password" name="password1">
+
+                        <label>Підтвердження паролю</label>
+                        <input required class="log-input" type="password" name="password2">
+
+                        <input type="radio" name="check" class="checkbox">
+                        <label class="agree">я погоджуюсь з правилами сайту</label>
+
+                        <a class="log-reg-link" style="cursor:pointer;" href="{% url 'login' %}">Ввійти в аккаунт</a>
+
+                        <input class="log-button" type="submit" value="Створити">
+                        {% for message in messages %}
+                        <div class="agree" style="font-family: 'Comfortaa';padding:0;margin:0;font-size:12px;margin-bottom:10px;font-family:">{{message}}</div>
+                        {% endfor %}
+                    </form>
+                    <div class="log-rules" onclick="rulesButtonOn();">
+                        <img src="{% static 'icons/rules-icon.png' %}">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="log-right">
+            <img src="{% static 'images/log-1.png' %}">
+            <img src="{% static 'images/log-2.png' %}">
+            <img src="{% static 'images/log-3.png' %}">
+            <img src="{% static 'images/log-4.png' %}">
+            <img src="{% static 'images/log-5.png' %}">
+            <img src="{% static 'images/log-6.png' %}">
+            <div class="right-rules">
+                <p style="margin-left:20px;margin-right:20px;margin-top:26px;">1.1. Якщо ви вирішили користуватися вищезгаданими сайтами та їх додатками, включаючи RSS, API, програмне забезпечення та інші файли, ви даєте згоду на дотримання всіх умов, викладених у цих Правилах користування сайтом (надалі - Правила).
+                    1.2. Ми можемо змінювати, додавати або видаляти частини цих Умов надання послуг у будь-який час і такі зміни набирають чинності негайно після публікації. Ваше зобов’язання розглянути ці Правила перед кожним використанням сайту і продовжуючи використовувати цей сайт, ви погоджуєтесь на будь-які зміни та зобов’язання розглянути ці Правила перед кожним використанням сайту і .
+                    1.3 Ми можемо змінювати, додавати або видаляти правила сайту.
+                </p>
+                <div class="rules-button-container">
+                    <button class="rules-button" onclick="rulesButtonOff();">Ознайомлений</button>
+                </div>
+            </div>
+        </div>
+    </div>
+ </main>
+{% endif %}
+<script src="{% static 'js/rules.js' %}"></script>
+{% endblock %}
